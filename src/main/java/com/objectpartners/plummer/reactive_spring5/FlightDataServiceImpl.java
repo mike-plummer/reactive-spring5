@@ -14,20 +14,18 @@ import java.util.Queue;
 @Service
 public class FlightDataServiceImpl implements FlightDataService {
 
+    // Builds a rate-limited Flux that publishes a FlightEvent object every three seconds
     private static final Flux<FlightEvent> EVENT_STREAM = Flux.zip(
             Flux.interval(Duration.of(3, ChronoUnit.SECONDS)),
             Flux.<FlightEvent>generate(sink -> sink.next(FlightEventGenerator.generateRandomEvent())).limitRate(1),
-            (interval, event) -> {
-                System.out.println("Zipped stream generating event");
-                return event;
-            }
+            (interval, event) -> event
     ).share();
 
     private static final Queue<FlightEvent> EVENTS = new CircularFifoQueue<>();
 
     static {
         EVENT_STREAM.subscribe(event -> {
-            System.out.println("Got an event, adding to archive");
+            System.out.println("Saw an event, adding to archive");
             EVENTS.add(event);
         });
     }
