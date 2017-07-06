@@ -1,5 +1,6 @@
 package com.objectpartners.plummer.reactive_spring5;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -21,7 +22,7 @@ public class FlightDataServiceImpl implements FlightDataService {
             (interval, event) -> event
     ).share();
 
-    private static final Queue<FlightEvent> EVENTS = new CircularFifoQueue<>();
+    private static final Queue<FlightEvent> EVENTS = new CircularFifoQueue<>(1000);
 
     static {
         EVENT_STREAM.subscribe(event -> {
@@ -43,10 +44,5 @@ public class FlightDataServiceImpl implements FlightDataService {
     @Override
     public List<FlightEvent> getAllEvents() {
         return new ArrayList<>(EVENTS);
-    }
-
-    @Override
-    public Mono<FlightEvent> getLastEvent() {
-        return getEventFeed().last(null);
     }
 }

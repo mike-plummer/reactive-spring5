@@ -11,6 +11,4 @@ public interface FlightDataService {
     Mono<FlightEvent> getNextEvent();
 
     List<FlightEvent> getAllEvents();
-
-    Mono<FlightEvent> getLastEvent();
 }
