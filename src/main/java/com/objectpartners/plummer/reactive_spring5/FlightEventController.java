@@ -32,6 +32,8 @@ public class FlightEventController {
 
     @PostMapping("/find")
     public Flux<FlightEvent> getEvents(@RequestBody Mono<List<Long>> idsToFind) {
+        // Contrived example but ids that are posted to this controller will be resolved asynchronously
+        // The controller method will begin executing before they are deserialized
         return idsToFind
                 .flatMapIterable(ids -> ids)
                 .map(id -> flightDataService.getAllEvents().stream()
