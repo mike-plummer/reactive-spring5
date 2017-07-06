@@ -5,6 +5,7 @@ Examples of using new Reactive structures in Spring v5
 Launch the Spring Application. Either:
 
 a. Directly run Application.java from your IDE
+
 b. `gradle bootRun`
     
 You can cURL the following URLs to observe various behaviors:
